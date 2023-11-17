@@ -7,7 +7,7 @@ export class MapManager {
   mapSize = { x: 32, y: 32 };
   tilesets = [];
 
-  view = { x: 0, y: 0, w: 800, h: 600 };
+  view = { x: 0, y: 0, w: 1000, h: 1000 };
 
   constructor(ctx) {
     this.ctx = ctx;
@@ -76,25 +76,31 @@ export class MapManager {
     }
 
     const ctx = this.ctx;
-    if (this.tLayer === null) {
-      this.tLayer = this.mapData.layers.find(layer => layer.type === 'tilelayer') ?? null;
-    }
+    // if (this.tLayer === null) {
+    //   this.tLayer = this.mapData.layers.find(layer => layer.type === 'tilelayer') ?? null;
+    // }
 
-    for (let i = 0; i < this.tLayer.data.length; ++i) {
-      if (this.tLayer.data[i] === 0) {
+    for (let id = 0; id < this.mapData.layers.length; ++id) {
+      const layer = this.mapData.layers[id];
+      if (!layer.data) {
         continue;
       }
-      const tile = this.getTile(this.tLayer.data[i]);
-      let pX = (i % this.xCount) * this.tSize.x;
-      let pY = Math.floor(i / this.xCount) * this.tSize.y;
-      if (!this.isVisible(pX, pY, this.tSize.x, this.tSize.y)) {
-        continue;
-      }
-      pX -= this.view.x;
-      pY -= this.view.y;
-      ctx.drawImage(tile.img, tile.px, tile.py, this.tSize.x, this.tSize.y, pX, pY, this.tSize.x, this.tSize.y);
-    }
 
+      for (let i = 0; i < layer.data.length; ++i) {
+        if (layer.data[i] === 0) {
+          continue;
+        }
+        const tile = this.getTile(layer.data[i]);
+        let pX = (i % this.xCount) * this.tSize.x;
+        let pY = Math.floor(i / this.xCount) * this.tSize.y;
+        if (!this.isVisible(pX, pY, this.tSize.x, this.tSize.y)) {
+          continue;
+        }
+        pX -= this.view.x;
+        pY -= this.view.y;
+        ctx.drawImage(tile.img, tile.px, tile.py, this.tSize.x, this.tSize.y, pX, pY, this.tSize.x, this.tSize.y);
+      }
+    }
   }
 
   isVisible(x, y, width, height) {
