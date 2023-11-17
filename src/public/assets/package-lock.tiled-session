@@ -1,0 +1,27 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "tilemap.tsx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "tilemap.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1.4086
+        }
+    },
+    "last.imagePath": "/Users/purposeless/projects/js/tanks-2d/assets",
+    "map.lastUsedFormat": "json",
+    "openFiles": [
+        "tilemap.tsx"
+    ],
+    "project": "package-lock.tiled-project",
+    "recentFiles": [
+        "tilemap.tsx"
+    ],
+    "tileset.lastUsedFormat": "json"
+}
