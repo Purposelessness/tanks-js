@@ -1,13 +1,14 @@
+import gameManager from '../managers/game-manager.js';
 import physicsManager from '../managers/physics-manager.js';
 import spriteManager from '../managers/sprite-manager.js';
 import { Entity } from './entity.js';
 
 export class Rocket extends Entity {
   constructor() {
-    super(4);
+    super(2);
+    this.type = 'Rocket';
     this.width = 4;
     this.height = 4;
-    this.moveX = 1;
   }
 
   draw(ctx) {
@@ -19,10 +20,12 @@ export class Rocket extends Entity {
   }
 
   onCollisionEntity(entity) {
-    console.log('Player collided with entity:', entity);
+    if (entity.type !== 'Rocket') {
+      gameManager.deleteEntity(this);
+    }
   }
 
   onCollisionTile() {
-    console.log('Player collided with tile');
+    gameManager.deleteEntity(this);
   }
 }

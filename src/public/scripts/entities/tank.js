@@ -5,9 +5,11 @@ import { Rocket } from './rocket.js';
 
 export class Tank extends Entity {
   spriteName = 'EnemyLeft';
+  direction = 'left';
 
   constructor(isEnemy = true) {
     super(1);
+    this.type = 'Tank';
     this.isEnemy = isEnemy;
     this.width = 32;
     this.height = 32;
@@ -21,32 +23,28 @@ export class Tank extends Entity {
     this.moveY = -1;
     this.moveX = 0;
     this.spriteName = this.isEnemy ? 'EnemyTop' : 'PlayerTop';
+    this.direction = 'up';
   }
 
   goDown() {
     this.moveY = 1;
     this.moveX = 0;
     this.spriteName = this.isEnemy ? 'EnemyDown' : 'PlayerDown';
+    this.direction = 'down';
   }
 
   goLeft() {
     this.moveY = 0;
     this.moveX = -1;
-    if (this.isEnemy) {
-      this.spriteName = 'EnemyLeft';
-    } else {
-      this.spriteName = 'PlayerLeft';
-    }
+    this.spriteName = this.isEnemy ? 'EnemyLeft' : 'PlayerLeft';
+    this.direction = 'left';
   }
 
   goRight() {
     this.moveY = 0;
     this.moveX = 1;
-    if (this.isEnemy) {
-      this.spriteName = 'EnemyRight';
-    } else {
-      this.spriteName = 'PlayerRight';
-    }
+    this.spriteName = this.isEnemy ? 'EnemyRight' : 'PlayerRight';
+    this.direction = 'right';
   }
 
   draw(ctx) {
@@ -67,10 +65,30 @@ export class Tank extends Entity {
 
   fire() {
     const rocket = new Rocket();
-    rocket.x = this.x + this.width / 2 - rocket.width / 2;
-    rocket.y = this.y + this.height / 2 - rocket.height / 2;
-    rocket.moveX = this.moveX;
-    rocket.moveY = this.moveY;
+
+    switch (this.direction) {
+      case 'up':
+        rocket.x = this.x;
+        rocket.y = this.y - 22;
+        rocket.moveY = -1;
+        break;
+      case 'down':
+        rocket.x = this.x;
+        rocket.y = this.y + 22;
+        rocket.moveY = 1;
+        break;
+      case 'left':
+        rocket.x = this.x - 22;
+        rocket.y = this.y;
+        rocket.moveX = -1;
+        break;
+      case 'right':
+        rocket.x = this.x + 22;
+        rocket.y = this.y;
+        rocket.moveX = 1;
+        break;
+    }
+
     return rocket;
   }
 }

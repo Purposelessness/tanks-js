@@ -1,3 +1,5 @@
+import gameManager from '../managers/game-manager.js';
+
 export class Entity {
   x = 0;
   y = 0;
@@ -9,5 +11,7 @@ export class Entity {
 
   constructor(speed) {
     this.speed = speed;
+    this.id = gameManager.getUniqueId();
+    this.type = null;
   }
 }

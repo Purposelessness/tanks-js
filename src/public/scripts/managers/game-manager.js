@@ -8,10 +8,16 @@ import mapManager from './map-manager.js';
 import spriteManager from './sprite-manager.js';
 
 class GameManager {
+  static uniqueId = 0;
+
+  getUniqueId() {
+    return GameManager.uniqueId++;
+  }
+
   ctx = null;
   canvas = null;
 
-  entities = [];
+  entities = {};
   toDelete = [];
 
   player = null;
@@ -29,7 +35,7 @@ class GameManager {
     entity.y = y;
     entity.width = width;
     entity.height = height;
-    this.entities.push(entity);
+    this.entities[entity.id] = entity;
 
     if (type === 'Player') {
       this.player = entity;
@@ -42,18 +48,23 @@ class GameManager {
     this.toDelete.push(entity);
   };
 
+  forEachEntity(callback) {
+    Object.values(this.entities).forEach(callback);
+  }
+
+  getEntitiesAsArray() {
+    return Object.values(this.entities);
+  }
+
   draw(ctx) {
-    this.entities.forEach(entity => entity.draw(ctx));
+    this.forEachEntity(entity => entity.draw(ctx));
   };
 
   update() {
     this.doControls();
-    this.entities.forEach(entity => entity.update());
+    this.forEachEntity(entity => entity.update());
     this.toDelete.forEach(entity => {
-      const index = this.entities.indexOf(entity);
-      if (index > -1) {
-        this.entities.splice(index, 1);
-      }
+      delete this.entities[entity.id];
     });
     this.toDelete = [];
     mapManager.draw(this.ctx);
@@ -82,7 +93,7 @@ class GameManager {
     if (eventsManager.actions['fire']) {
       const bullet = this.player.fire();
       if (bullet) {
-        this.entities.push(bullet);
+        this.entities[bullet.id] = bullet;
       }
     }
   }

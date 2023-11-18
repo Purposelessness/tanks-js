@@ -7,11 +7,11 @@ class PhysicsManager {
       return false;
     }
 
-    const newX = obj.x + Math.floor(obj.moveX * obj.speed);
-    const newY = obj.y + Math.floor(obj.moveY * obj.speed);
+    const newX = obj.x + Math.floor(obj.moveX * obj.speed) + 16;
+    const newY = obj.y + Math.floor(obj.moveY * obj.speed) + 16;
 
-    const wallAt = this.wallAt(newX + 16, newY + 16, obj.width, obj.height);
-    const waterAt = this.waterAt(newX + 16, newY + 16, obj.width, obj.height);
+    const wallAt = this.wallAt(newX, newY, obj.width, obj.height);
+    const waterAt = this.waterAt(newX, newY, obj.width, obj.height);
 
     const e = this.entityAt(obj, newX, newY);
 
@@ -27,8 +27,8 @@ class PhysicsManager {
       return false;
     }
 
-    obj.x = newX;
-    obj.y = newY;
+    obj.x = newX - 16;
+    obj.y = newY - 16;
     return true;
   }
 
@@ -47,14 +47,14 @@ class PhysicsManager {
   }
 
   entityAt(obj, x, y) {
-    return gameManager.entities.find(e => {
-      if (e === obj) {
+    return gameManager.getEntitiesAsArray().find(e => {
+      if (e.id === obj.id) {
         return false;
       }
-      return x < e.x + e.width &&
-        x + obj.width > e.x &&
-        y < e.y + e.height &&
-        y + obj.height > e.y;
+      return x < e.x + 16 + e.width / 2 &&
+        x > e.x + 16 - e.width / 2 &&
+        y < e.y + 16 + e.height / 2 &&
+        y > e.y + 16 - e.height / 2;
     }) ?? null;
   }
 }
