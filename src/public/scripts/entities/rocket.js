@@ -22,6 +22,7 @@ export class Rocket extends Entity {
   onCollisionEntity(entity) {
     if (entity.type !== 'Rocket') {
       gameManager.deleteEntity(this);
+      gameManager.deleteEntity(entity);
     }
   }
 

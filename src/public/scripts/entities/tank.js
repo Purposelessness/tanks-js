@@ -6,6 +6,9 @@ import { Rocket } from './rocket.js';
 export class Tank extends Entity {
   spriteName = 'Enemy';
 
+  lastFireDate = 0;
+  fireDelay = 1000;
+
   constructor(isEnemy = true) {
     super(1);
     this.type = 'Tank';
@@ -36,6 +39,12 @@ export class Tank extends Entity {
   }
 
   fire() {
+    console.log('Fire!', new Date() - this.lastFireDate);
+    if (new Date().getTime() - this.lastFireDate < this.fireDelay) {
+      return null;
+    }
+    this.lastFireDate = new Date().getTime();
+
     const rocket = new Rocket();
 
     switch (this.direction) {
