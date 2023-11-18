@@ -1,9 +1,8 @@
-import { MapManager } from './managers/map-manager.js';
+import gameManager from './managers/game-manager.js';
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
-const mapManager = new MapManager(ctx);
-
-mapManager.loadMap('/assets/first.tmj');
-mapManager.draw();
+gameManager.ctx = ctx;
+gameManager.load();
+gameManager.play();

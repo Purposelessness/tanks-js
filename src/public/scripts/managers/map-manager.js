@@ -1,6 +1,7 @@
+import gameManager from './game-manager.js';
+
 export class MapManager {
   mapData = null;
-  tLayer = null;
   xCount = 0;
   yCount = 0;
   tSize = { x: 32, y: 32 };
@@ -8,11 +9,6 @@ export class MapManager {
   tilesets = [];
 
   view = { x: 0, y: 0, w: 1000, h: 1000 };
-
-  constructor(ctx) {
-    this.ctx = ctx;
-  }
-
 
   loadMap(path) {
     const request = new XMLHttpRequest();
@@ -69,16 +65,11 @@ export class MapManager {
       this.tilesets.length === this.mapData.tilesets.length;
   }
 
-  draw() {
+  draw(ctx) {
     if (!this.jsonLoaded || !this.isImgLoaded()) {
-      setTimeout(() => this.draw(), 100);
+      setTimeout(() => this.draw(ctx), 100);
       return;
     }
-
-    const ctx = this.ctx;
-    // if (this.tLayer === null) {
-    //   this.tLayer = this.mapData.layers.find(layer => layer.type === 'tilelayer') ?? null;
-    // }
 
     for (let id = 0; id < this.mapData.layers.length; ++id) {
       const layer = this.mapData.layers[id];
@@ -126,4 +117,38 @@ export class MapManager {
     return this.tilesets.find(tileset => tileset.firstgid <= tileIndex) ?? null;
   }
 
+  parseEntities() {
+    if (!this.jsonLoaded || !this.isImgLoaded()) {
+      setTimeout(() => this.parseEntities(), 100);
+      return;
+    }
+
+    for (let id = 0; id < this.mapData.layers.length; ++id) {
+      const layer = this.mapData.layers[id];
+      if (!layer.objects || layer.type !== 'objectgroup') {
+        continue;
+      }
+
+      for (let i = 0; i < layer.objects.length; ++i) {
+        const entity = layer.objects[i];
+        gameManager.createEntity(
+          entity.type, entity.name,
+          entity.x, entity.y,
+          entity.width, entity.height,
+        );
+      }
+    }
+  }
+
+  getTilesetIdx(layer, x, y) {
+    const wX = Math.floor(x / this.tSize.x);
+    const wY = Math.floor(y / this.tSize.y);
+    const idx = wY * this.xCount + wX;
+    return layer.data[idx];
+  }
+
 }
+
+const mapManager = new MapManager();
+
+export default mapManager;
