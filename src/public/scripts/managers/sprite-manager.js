@@ -50,9 +50,6 @@ class SpriteManager {
       return;
     }
 
-    x -= sprite.w / 2;
-    y -= sprite.h / 2;
-
     ctx.drawImage(this.image,
       sprite.x, sprite.y,
       sprite.w, sprite.h,

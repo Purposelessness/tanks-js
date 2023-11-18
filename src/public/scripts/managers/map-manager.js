@@ -8,7 +8,7 @@ export class MapManager {
   mapSize = { x: 32, y: 32 };
   tilesets = [];
 
-  view = { x: 0, y: 0, w: 1000, h: 1000 };
+  view = { x: 0, y: 0, w: 970, h: 650 };
 
   loadMap(path) {
     const request = new XMLHttpRequest();
@@ -140,11 +140,12 @@ export class MapManager {
     }
   }
 
-  getTilesetIdx(layer, x, y) {
+  getTilesetIdx(layerName, x, y) {
     const wX = Math.floor(x / this.tSize.x);
     const wY = Math.floor(y / this.tSize.y);
     const idx = wY * this.xCount + wX;
-    return layer.data[idx];
+    const layer = this.mapData.layers.find(layer => layer.name === layerName);
+    return layer ? layer.data[idx] : null;
   }
 
 }

@@ -1,10 +1,14 @@
+import physicsManager from '../managers/physics-manager.js';
 import spriteManager from '../managers/sprite-manager.js';
 import { Entity } from './entity.js';
+import { Rocket } from './rocket.js';
 
 export class Tank extends Entity {
   constructor(isEnemy = true) {
     super(1);
     this.isEnemy = isEnemy;
+    this.width = 32;
+    this.height = 32;
   }
 
 
@@ -17,22 +21,23 @@ export class Tank extends Entity {
   }
 
   update() {
-    this.x += this.moveX * this.speed;
-    this.y += this.moveY * this.speed;
+    physicsManager.update(this);
   }
 
-  onCollision(entity) {
-    if (entity instanceof Wall) {
-      console.log('Player collided with a wall!');
-    }
+  onCollisionEntity(entity) {
+    console.log('Player collided with entity:', entity);
+  }
+
+  onCollisionTile(tile) {
+    console.log('Player collided with tile:', tile);
   }
 
   fire() {
-    const bullet = new Bullet();
-    bullet.x = this.x + this.width / 2 - bullet.width / 2;
-    bullet.y = this.y + this.height / 2 - bullet.height / 2;
-    bullet.moveX = this.moveX;
-    bullet.moveY = this.moveY;
-    return bullet;
+    const rocket = new Rocket();
+    rocket.x = this.x + this.width / 2 - rocket.width / 2;
+    rocket.y = this.y + this.height / 2 - rocket.height / 2;
+    rocket.moveX = this.moveX;
+    rocket.moveY = this.moveY;
+    return rocket;
   }
 }

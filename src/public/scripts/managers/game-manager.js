@@ -1,13 +1,15 @@
 import { Enemy } from '../entities/enemy.js';
-import { Health } from '../entities/Health.js';
+import { Health } from '../entities/health.js';
 import { Player } from '../entities/player.js';
 import { Rocket } from '../entities/rocket.js';
+import eventsManager from './events-manager.js';
 
 import mapManager from './map-manager.js';
 import spriteManager from './sprite-manager.js';
 
 class GameManager {
   ctx = null;
+  canvas = null;
 
   entities = [];
   toDelete = [];
@@ -28,6 +30,12 @@ class GameManager {
     entity.width = width;
     entity.height = height;
     this.entities.push(entity);
+    console.log('Created entity:', entity);
+
+    if (type === 'Player') {
+      this.player = entity;
+    }
+
     return entity;
   };
 
@@ -40,6 +48,7 @@ class GameManager {
   };
 
   update() {
+    this.doControls();
     this.entities.forEach(entity => entity.update());
     this.toDelete.forEach(entity => {
       const index = this.entities.indexOf(entity);
@@ -52,11 +61,34 @@ class GameManager {
     this.draw(this.ctx);
   };
 
+  doControls() {
+    if (!this.player) {
+      console.log('Player not found!');
+      return;
+    }
+
+    this.player.moveX = 0;
+    this.player.moveY = 0;
+
+    if (eventsManager.actions['up']) this.player.moveY = -1;
+    if (eventsManager.actions['down']) this.player.moveY = 1;
+    if (eventsManager.actions['left']) this.player.moveX = -1;
+    if (eventsManager.actions['right']) this.player.moveX = 1;
+
+    if (eventsManager.actions['fire']) {
+      const bullet = this.player.fire();
+      if (bullet) {
+        this.entities.push(bullet);
+      }
+    }
+  }
+
   load() {
     mapManager.loadMap('/assets/first.tmj');
     spriteManager.loadAtlas('/assets/sprites.json', '/assets/spritesheet.png');
     mapManager.parseEntities();
     mapManager.draw(this.ctx);
+    eventsManager.setup(this.canvas);
   }
 
   play() {
