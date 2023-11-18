@@ -5,6 +5,9 @@ import { Entity } from './entity.js';
 export class Rocket extends Entity {
   constructor() {
     super(4);
+    this.width = 4;
+    this.height = 4;
+    this.moveX = 1;
   }
 
   draw(ctx) {
@@ -19,7 +22,7 @@ export class Rocket extends Entity {
     console.log('Player collided with entity:', entity);
   }
 
-  onCollisionTile(tile) {
-    console.log('Player collided with tile:', tile);
+  onCollisionTile() {
+    console.log('Player collided with tile');
   }
 }

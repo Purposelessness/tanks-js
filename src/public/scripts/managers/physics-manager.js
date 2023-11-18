@@ -10,8 +10,8 @@ class PhysicsManager {
     const newX = obj.x + Math.floor(obj.moveX * obj.speed);
     const newY = obj.y + Math.floor(obj.moveY * obj.speed);
 
-    const wallAt = this.wallAt(newX + obj.width / 2, newY + obj.height / 2);
-    const waterAt = this.waterAt(newX + obj.width / 2, newY + obj.height / 2);
+    const wallAt = this.wallAt(newX + 16, newY + 16, obj.width, obj.height);
+    const waterAt = this.waterAt(newX + 16, newY + 16, obj.width, obj.height);
 
     const e = this.entityAt(obj, newX, newY);
 
@@ -22,8 +22,8 @@ class PhysicsManager {
       obj.onCollisionEntity(e);
       return false;
     }
-    if (wallAt !== 0 && obj.onCollisionTile) {
-      obj.onCollisionTile(wallAt);
+    if (wallAt && obj.onCollisionTile) {
+      obj.onCollisionTile();
       return false;
     }
 
@@ -32,13 +32,18 @@ class PhysicsManager {
     return true;
   }
 
-  wallAt(x, y) {
-    return mapManager.getTilesetIdx('Walls', x, y);
+  wallAt(x, y, width, height) {
+    return mapManager.getTilesetIdx('Walls', x - width / 2, y - height / 2) !== 0 ||
+      mapManager.getTilesetIdx('Walls', x + width / 2, y - height / 2) !== 0 ||
+      mapManager.getTilesetIdx('Walls', x - width / 2, y + height / 2) !== 0 ||
+      mapManager.getTilesetIdx('Walls', x + width / 2, y + height / 2) !== 0;
   }
 
-  waterAt(x, y) {
-    const waterTile = mapManager.getTilesetIdx('Background', x, y);
-    return waterTile === 73;
+  waterAt(x, y, width, height) {
+    return mapManager.getTilesetIdx('Background', x - width / 2, y - height / 2) === 73 ||
+      mapManager.getTilesetIdx('Background', x + width / 2, y - height / 2) === 73 ||
+      mapManager.getTilesetIdx('Background', x - width / 2, y + height / 2) === 73 ||
+      mapManager.getTilesetIdx('Background', x + width / 2, y + height / 2) === 73;
   }
 
   entityAt(obj, x, y) {
@@ -46,7 +51,6 @@ class PhysicsManager {
       if (e === obj) {
         return false;
       }
-      console.log(e.width, obj.width);
       return x < e.x + e.width &&
         x + obj.width > e.x &&
         y < e.y + e.height &&

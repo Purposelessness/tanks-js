@@ -30,7 +30,6 @@ class GameManager {
     entity.width = width;
     entity.height = height;
     this.entities.push(entity);
-    console.log('Created entity:', entity);
 
     if (type === 'Player') {
       this.player = entity;
@@ -70,10 +69,15 @@ class GameManager {
     this.player.moveX = 0;
     this.player.moveY = 0;
 
-    if (eventsManager.actions['up']) this.player.moveY = -1;
-    if (eventsManager.actions['down']) this.player.moveY = 1;
-    if (eventsManager.actions['left']) this.player.moveX = -1;
-    if (eventsManager.actions['right']) this.player.moveX = 1;
+    if (eventsManager.actions['up']) {
+      this.player.goUp();
+    } else if (eventsManager.actions['down']) {
+      this.player.goDown();
+    } else if (eventsManager.actions['left']) {
+      this.player.goLeft();
+    } else if (eventsManager.actions['right']) {
+      this.player.goRight();
+    }
 
     if (eventsManager.actions['fire']) {
       const bullet = this.player.fire();
