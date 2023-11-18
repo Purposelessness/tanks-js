@@ -9,9 +9,35 @@ export class Entity {
   moveY = 0;
   speed = 0;
 
+  direction = 'Left';
+
   constructor(speed) {
     this.speed = speed;
     this.id = gameManager.getUniqueId();
     this.type = null;
+  }
+
+  goUp() {
+    this.moveY = -1;
+    this.moveX = 0;
+    this.direction = 'Up';
+  }
+
+  goDown() {
+    this.moveY = 1;
+    this.moveX = 0;
+    this.direction = 'Down';
+  }
+
+  goLeft() {
+    this.moveY = 0;
+    this.moveX = -1;
+    this.direction = 'Left';
+  }
+
+  goRight() {
+    this.moveY = 0;
+    this.moveX = 1;
+    this.direction = 'Right';
   }
 }

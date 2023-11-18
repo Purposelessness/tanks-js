@@ -4,8 +4,7 @@ import { Entity } from './entity.js';
 import { Rocket } from './rocket.js';
 
 export class Tank extends Entity {
-  spriteName = 'EnemyLeft';
-  direction = 'left';
+  spriteName = 'Enemy';
 
   constructor(isEnemy = true) {
     super(1);
@@ -15,40 +14,13 @@ export class Tank extends Entity {
     this.height = 32;
 
     if (!isEnemy) {
-      this.spriteName = 'PlayerLeft';
+      this.spriteName = 'Player';
     }
   }
 
-  goUp() {
-    this.moveY = -1;
-    this.moveX = 0;
-    this.spriteName = this.isEnemy ? 'EnemyTop' : 'PlayerTop';
-    this.direction = 'up';
-  }
-
-  goDown() {
-    this.moveY = 1;
-    this.moveX = 0;
-    this.spriteName = this.isEnemy ? 'EnemyDown' : 'PlayerDown';
-    this.direction = 'down';
-  }
-
-  goLeft() {
-    this.moveY = 0;
-    this.moveX = -1;
-    this.spriteName = this.isEnemy ? 'EnemyLeft' : 'PlayerLeft';
-    this.direction = 'left';
-  }
-
-  goRight() {
-    this.moveY = 0;
-    this.moveX = 1;
-    this.spriteName = this.isEnemy ? 'EnemyRight' : 'PlayerRight';
-    this.direction = 'right';
-  }
 
   draw(ctx) {
-    spriteManager.drawSprite(ctx, this.spriteName, this.x, this.y);
+    spriteManager.drawSprite(ctx, this.spriteName + this.direction, this.x, this.y);
   }
 
   update() {
@@ -67,25 +39,25 @@ export class Tank extends Entity {
     const rocket = new Rocket();
 
     switch (this.direction) {
-      case 'up':
+      case 'Up':
         rocket.x = this.x;
         rocket.y = this.y - 22;
-        rocket.moveY = -1;
+        rocket.goUp();
         break;
-      case 'down':
+      case 'Down':
         rocket.x = this.x;
         rocket.y = this.y + 22;
-        rocket.moveY = 1;
+        rocket.goDown();
         break;
-      case 'left':
+      case 'Left':
         rocket.x = this.x - 22;
         rocket.y = this.y;
-        rocket.moveX = -1;
+        rocket.goLeft();
         break;
-      case 'right':
+      case 'Right':
         rocket.x = this.x + 22;
         rocket.y = this.y;
-        rocket.moveX = 1;
+        rocket.goRight();
         break;
     }
 

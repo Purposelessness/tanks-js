@@ -12,7 +12,7 @@ export class Rocket extends Entity {
   }
 
   draw(ctx) {
-    spriteManager.drawSprite(ctx, 'RocketTop', this.x, this.y);
+    spriteManager.drawSprite(ctx, 'Rocket' + this.direction, this.x, this.y);
   }
 
   update() {
