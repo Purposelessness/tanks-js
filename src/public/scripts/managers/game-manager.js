@@ -13,6 +13,14 @@ import viewManager from './view-manager.js';
 class GameManager {
   static uniqueId = 0;
   isPlaying = false;
+  interval = null;
+
+  maps = [
+    '/assets/second.tmj',
+    '/assets/first.tmj',
+  ];
+  level = 1;
+  enemies = 0;
 
   getUniqueId() {
     return GameManager.uniqueId++;
@@ -46,6 +54,8 @@ class GameManager {
     if (type === 'Player') {
       this.player = entity;
     } else if (type === 'Enemy') {
+      ++this.enemies;
+      entity.health = Math.floor((this.level + 1) / 2);
       enemyController.enemies[entity.id] = new EnemyData(entity);
     }
 
@@ -57,12 +67,17 @@ class GameManager {
     if (entity.type === 'Tank') {
       if (entity.isEnemy) {
         delete enemyController.enemies[entity.id];
+        --this.enemies;
+        if (this.enemies === 0) {
+          this.nextLevel();
+        }
       } else {
         this.player = null;
+        this.score = 0;
         this.stop();
       }
     }
-  };
+  }
 
   forEachEntity(callback) {
     Object.values(this.entities).forEach(callback);
@@ -116,12 +131,24 @@ class GameManager {
     }
   }
 
-  load() {
-    mapManager.loadMap('/assets/first.tmj');
+  start() {
+    eventsManager.setup(this.canvas);
     spriteManager.loadAtlas('/assets/sprites.json', '/assets/spritesheet.png');
+  }
+
+  load() {
+    const map = this.maps[(this.level - 1) % 2];
+    console.log(`Loading map ${map}`);
+    mapManager.loadMap(map);
     mapManager.parseEntities();
     mapManager.draw(this.ctx);
-    eventsManager.setup(this.canvas);
+  }
+
+  nextLevel() {
+    ++this.level;
+    this.stop();
+    this.load();
+    this.play();
   }
 
   update() {
@@ -129,22 +156,28 @@ class GameManager {
       return;
     }
     this.updateLoop();
-    requestAnimationFrame(() => this.update());
   }
 
   play() {
     this.isPlaying = true;
-    this.update();
+    this.interval = setInterval(() => {
+      this.update();
+    }, 10);
     enemyAiController.start();
   }
 
   stop() {
     this.isPlaying = false;
+    clearInterval(this.interval);
     enemyAiController.stop();
+    this.entities = {};
+    this.toDelete = [];
+    this.player = null;
+    mapManager.clear();
   }
 
   addScore(score) {
-    this.score += score;
+    this.score += score * this.level;
     console.log(`Score: ${this.score}`);
     viewManager.updateScore(this.score);
   }

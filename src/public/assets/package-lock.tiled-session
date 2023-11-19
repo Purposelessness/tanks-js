@@ -13,11 +13,11 @@
             "expandedObjectLayers": [
                 6
             ],
-            "scale": 0.8752,
+            "scale": 0.5998,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 573.0118829981719,
-                "y": 476.4625228519195
+                "x": 532.6775591863955,
+                "y": 268.42280760253414
             }
         },
         "first.tmx": {
@@ -26,6 +26,17 @@
             "viewCenter": {
                 "x": 480.4268736357021,
                 "y": 321.3194276012612
+            }
+        },
+        "second.tmj": {
+            "expandedObjectLayers": [
+                4
+            ],
+            "scale": 0.8372,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 639.6321070234114,
+                "y": 553.03392259914
             }
         },
         "tilemap.tsj": {
@@ -43,6 +54,7 @@
     ],
     "project": "package-lock.tiled-project",
     "recentFiles": [
+        "second.tmj",
         "first.tmj",
         "first.tmx",
         "tilemap.tsx",

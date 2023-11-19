@@ -12,5 +12,6 @@ reloadButton.addEventListener('click', () => {
 gameManager.canvas = canvas;
 gameManager.ctx = ctx;
 
+gameManager.start();
 gameManager.load();
 gameManager.play();

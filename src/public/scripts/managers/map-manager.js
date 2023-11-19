@@ -10,6 +10,16 @@ export class MapManager {
 
   view = { x: 0, y: 0, w: 970, h: 650 };
 
+  clear() {
+    this.mapData = null;
+    this.xCount = 0;
+    this.yCount = 0;
+    this.tSize = { x: 32, y: 32 };
+    this.mapSize = { x: 32, y: 32 };
+    this.tilesets = [];
+    this.view = { x: 0, y: 0, w: 970, h: 650 };
+  }
+
   loadMap(path) {
     const request = new XMLHttpRequest();
     request.onreadystatechange = () => {

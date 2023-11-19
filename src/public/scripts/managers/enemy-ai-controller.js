@@ -97,7 +97,7 @@ class EnemyAiController {
     // Path to player
     let path = this.findPath(enemyTileX, enemyTileY, playerTileX, playerTileY);
 
-    if (path.length > 15) {
+    if (path.length > this.seekLength) {
       const tileToMove = this.findRandomEmptyTile();
       // Path to random tile
       path = this.findPath(enemyTileX, enemyTileY, tileToMove.x, tileToMove.y);

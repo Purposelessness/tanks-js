@@ -8,7 +8,7 @@ export class Tank extends Entity {
   spriteName = 'Enemy';
 
   lastFireDate = 0;
-  fireDelay = 500;
+  fireDelay = 750;
 
   health = 1;
 
