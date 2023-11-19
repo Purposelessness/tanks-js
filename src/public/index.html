@@ -19,9 +19,24 @@
 
     <canvas id="canvas" width="970" height="650"></canvas>
     <div>
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" value="Anonymous">
         <p>Score: <span id="score"></span></p>
         <p>Health: <span id="health"></span></p>
+        <button id="play">Play</button>
         <button id="reload">Reload</button>
+        <button id="reset">Reset</button>
+
+        <table id="scoreboard">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Score</th>
+            </tr>
+            </thead>
+            <tbody id="scoreboard-body">
+            </tbody>
+        </table>
     </div>
 
 </div>

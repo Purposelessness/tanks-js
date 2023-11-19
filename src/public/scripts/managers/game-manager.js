@@ -5,6 +5,7 @@ import { Rocket } from '../entities/rocket.js';
 import enemyAiController from './enemy-ai-controller.js';
 import enemyController, { EnemyData } from './enemy-controller.js';
 import eventsManager from './events-manager.js';
+import highscoreManager from './highscore-manager.js';
 
 import mapManager from './map-manager.js';
 import spriteManager from './sprite-manager.js';
@@ -16,8 +17,8 @@ class GameManager {
   interval = null;
 
   maps = [
-    '/assets/second.tmj',
     '/assets/first.tmj',
+    '/assets/second.tmj',
   ];
   level = 1;
   enemies = 0;
@@ -69,11 +70,14 @@ class GameManager {
         delete enemyController.enemies[entity.id];
         --this.enemies;
         if (this.enemies === 0) {
+          this.addScore(100);
           this.nextLevel();
         }
       } else {
-        this.player = null;
-        this.score = 0;
+        if (this.score > 0) {
+          console.log(`Adding highscore ${this.score}`);
+          highscoreManager.addEntry(viewManager.getName(), this.score);
+        }
         this.stop();
       }
     }
@@ -159,6 +163,7 @@ class GameManager {
   }
 
   play() {
+    if (this.isPlaying) return;
     this.isPlaying = true;
     this.interval = setInterval(() => {
       this.update();
