@@ -21,10 +21,10 @@ export class Rocket extends Entity {
   }
 
   onCollisionEntity(entity) {
-    if (entity.type !== 'Rocket') {
+    if (entity.type === 'Tank') {
       gameManager.deleteEntity(this);
-      if (!(this.isEnemy && entity.isEnemy)) {
-        gameManager.deleteEntity(entity);
+      if (this.isEnemy !== entity.isEnemy) {
+        entity.dealDamage();
       }
     }
     return true;

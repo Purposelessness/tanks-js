@@ -8,6 +8,7 @@ import eventsManager from './events-manager.js';
 
 import mapManager from './map-manager.js';
 import spriteManager from './sprite-manager.js';
+import viewManager from './view-manager.js';
 
 class GameManager {
   static uniqueId = 0;
@@ -145,6 +146,7 @@ class GameManager {
   addScore(score) {
     this.score += score;
     console.log(`Score: ${this.score}`);
+    viewManager.updateScore(this.score);
   }
 }
 

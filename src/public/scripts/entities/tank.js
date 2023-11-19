@@ -10,6 +10,8 @@ export class Tank extends Entity {
   lastFireDate = 0;
   fireDelay = 500;
 
+  health = 1;
+
   constructor(isEnemy = true) {
     super(1);
     this.type = 'Tank';
@@ -76,5 +78,12 @@ export class Tank extends Entity {
 
     gameManager.entities[rocket.id] = rocket;
     return rocket;
+  }
+
+  dealDamage() {
+    this.health--;
+    if (this.health <= 0) {
+      gameManager.deleteEntity(this);
+    }
   }
 }
