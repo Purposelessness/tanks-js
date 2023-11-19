@@ -6,15 +6,12 @@ import enemyController from './enemy-controller.js';
 import { Node } from './enemy-controller.js';
 
 class EnemyAiController {
+  seekRadius = 200;
+
   start() {
-    // new Promise(r => setTimeout(r, 2000)).then(
-    //   () => {
-    //     this.update();
-    //   },
-    // );
     setInterval(() => {
       this.recalculatePath();
-    }, 1000);
+    }, 500);
   }
 
   // Enemy should follow the player if he is in the radius of 200 pixels
@@ -22,26 +19,17 @@ class EnemyAiController {
   recalculatePath() {
     Object.keys(enemyController.enemies).forEach(enemyId => {
       const enemy = enemyController.enemies[enemyId].entity;
-      this.followPlayer(enemy);
+      this.selectPath(enemy);
+      this.shouldFire(enemy);
     });
   }
 
   isPlayerInRadius(enemy) {
-    return Math.abs(enemy.x - gameManager.player.x) < 200
-      && Math.abs(enemy.y - gameManager.player.y) < 200;
+    return Math.abs(enemy.x - gameManager.player.x) < this.seekRadius
+      && Math.abs(enemy.y - gameManager.player.y) < this.seekRadius;
   }
 
-  // Enemy should follow the player using A* algorithm
-  // player position is gameManager.player.x and gameManager.player.y
-  // Enemy can move only in 4 directions: up, down, left, right
-  // Enemy can't move diagonally
-  // Enemy can't move through walls
-  // Enemy can't move through other enemies
-  // Enemy can't move through water
-  // To check collision use physicsManager.wallAt (returns true), physicsManager.waterAt (returns true) and physicsManager.entityAt (returns entity)
-  // To move enemy use enemy.goUp(), enemy.goDown(), enemy.goLeft(), enemy.goRight()
-  // To stop enemy use enemy.stop()
-  followPlayer(enemy) {
+  getTiles(enemy) {
     const tSizeX = mapManager.tSize.x;
     const tSizeY = mapManager.tSize.y;
 
@@ -55,7 +43,62 @@ class EnemyAiController {
     const enemyTileX = Math.floor(enemyX / tSizeX);
     const enemyTileY = Math.floor(enemyY / tSizeY);
 
-    const path = this.findPath(enemyTileX, enemyTileY, playerTileX, playerTileY);
+    return {
+      playerTileX,
+      playerTileY,
+      enemyTileX,
+      enemyTileY,
+    };
+  }
+
+  shouldFire(enemy) {
+    if (this.isPlayerInLineOfSight(enemy)) {
+      enemyController.enemies[enemy.id].shouldFire = true;
+    }
+  }
+
+  isPlayerInLineOfSight(enemy) {
+    const tiles = this.getTiles(enemy);
+    const { playerTileX, playerTileY, enemyTileX, enemyTileY } = tiles;
+
+    if (playerTileX === enemyTileX) {
+      const minY = Math.min(playerTileY, enemyTileY);
+      const maxY = Math.max(playerTileY, enemyTileY);
+      for (let y = minY; y <= maxY; y++) {
+        if (physicsManager.wallAtTile(playerTileX, y)) {
+          return false;
+        }
+      }
+      return true;
+    } else if (playerTileY === enemyTileY) {
+      const minX = Math.min(playerTileX, enemyTileX);
+      const maxX = Math.max(playerTileX, enemyTileX);
+      for (let x = minX; x <= maxX; x++) {
+        if (physicsManager.wallAtTile(x, playerTileY)) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    return false;
+  }
+
+  // Enemy should follow the player using A* algorithm
+  // Enemy can move only in 4 directions: up, down, left, right
+  selectPath(enemy) {
+    const tiles = this.getTiles(enemy);
+    const { playerTileX, playerTileY, enemyTileX, enemyTileY } = tiles;
+
+    // Path to player
+    let path = this.findPath(enemyTileX, enemyTileY, playerTileX, playerTileY);
+
+    if (path.length > 10) {
+      const tileToMove = this.findRandomEmptyTile();
+      // Path to random tile
+      path = this.findPath(enemyTileX, enemyTileY, tileToMove.x, tileToMove.y);
+      enemyController.enemies[enemy.id].nextPosition = null;
+    }
 
     if (path.length > 0) {
       path.reverse();
@@ -144,9 +187,15 @@ class EnemyAiController {
     return neighbors;
   }
 
-  moveRandomly(enemy) {
-    enemy.moveX = Math.random() > 0.5 ? 1 : -1;
-    enemy.moveY = Math.random() > 0.5 ? 1 : -1;
+  findRandomEmptyTile() {
+    const x = Math.floor(Math.random() * mapManager.xCount);
+    const y = Math.floor(Math.random() * mapManager.yCount);
+
+    if (physicsManager.isTileEmpty(x, y)) {
+      return { x, y };
+    }
+
+    return this.findRandomEmptyTile();
   }
 }
 

@@ -4,11 +4,12 @@ import spriteManager from '../managers/sprite-manager.js';
 import { Entity } from './entity.js';
 
 export class Rocket extends Entity {
-  constructor() {
+  constructor(isEnemy = false) {
     super(2);
     this.type = 'Rocket';
     this.width = 4;
     this.height = 4;
+    this.isEnemy = isEnemy;
   }
 
   draw(ctx) {
@@ -22,8 +23,11 @@ export class Rocket extends Entity {
   onCollisionEntity(entity) {
     if (entity.type !== 'Rocket') {
       gameManager.deleteEntity(this);
-      gameManager.deleteEntity(entity);
+      if (!(this.isEnemy && entity.isEnemy)) {
+        gameManager.deleteEntity(entity);
+      }
     }
+    return true;
   }
 
   onCollisionTile() {

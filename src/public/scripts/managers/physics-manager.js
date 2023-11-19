@@ -19,12 +19,12 @@ class PhysicsManager {
       return false;
     }
     if (e != null && obj.onCollisionEntity) {
-      obj.onCollisionEntity(e);
-      return false;
+      const res = obj.onCollisionEntity(e);
+      if (!res) return false;
     }
     if (wallAt && obj.onCollisionTile) {
-      obj.onCollisionTile();
-      return false;
+      const res = obj.onCollisionTile();
+      if (!res) return false;
     }
 
     obj.x = newX - 16;

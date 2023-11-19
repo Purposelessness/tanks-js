@@ -1,3 +1,4 @@
+import gameManager from '../managers/game-manager.js';
 import physicsManager from '../managers/physics-manager.js';
 import spriteManager from '../managers/sprite-manager.js';
 import { Entity } from './entity.js';
@@ -7,7 +8,7 @@ export class Tank extends Entity {
   spriteName = 'Enemy';
 
   lastFireDate = 0;
-  fireDelay = 1000;
+  fireDelay = 500;
 
   constructor(isEnemy = true) {
     super(1);
@@ -31,6 +32,12 @@ export class Tank extends Entity {
   }
 
   onCollisionEntity(entity) {
+    if (this.isEnemy && !entity.isEnemy || !this.isEnemy && entity.isEnemy) {
+      gameManager.deleteEntity(this);
+      gameManager.deleteEntity(entity);
+      return false;
+    }
+    return this.isEnemy && entity.isEnemy;
   }
 
   onCollisionTile() {
@@ -42,7 +49,7 @@ export class Tank extends Entity {
     }
     this.lastFireDate = new Date().getTime();
 
-    const rocket = new Rocket();
+    const rocket = new Rocket(this.isEnemy);
 
     switch (this.direction) {
       case 'Up':
@@ -67,6 +74,7 @@ export class Tank extends Entity {
         break;
     }
 
+    gameManager.entities[rocket.id] = rocket;
     return rocket;
   }
 }

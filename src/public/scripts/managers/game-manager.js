@@ -74,8 +74,12 @@ class GameManager {
     enemyController.update();
     this.forEachEntity(entity => entity.update());
     this.toDelete.forEach(entity => {
-      this.entities[entity.id].onDelete();
-      delete this.entities[entity.id];
+      try {
+        this.entities[entity.id].onDelete();
+        delete this.entities[entity.id];
+      } catch (e) {
+        console.log(e);
+      }
     });
     this.toDelete = [];
     mapManager.draw(this.ctx);
@@ -101,10 +105,7 @@ class GameManager {
     }
 
     if (eventsManager.actions['fire']) {
-      const bullet = this.player.fire();
-      if (bullet) {
-        this.entities[bullet.id] = bullet;
-      }
+      this.player.fire();
     }
   }
 

@@ -18,6 +18,7 @@ export class EnemyData {
   // Path is an array of nodes
   path = [];
   nextPosition = null;
+  shouldFire = false;
 
   constructor(entity) {
     this.entity = entity;
@@ -40,23 +41,27 @@ class EnemyController {
   // Enemy position is in pixels
   // nextPosition is in pixels and is the next position the enemy should move to
   updateEnemy(enemyData) {
-    if (!enemyData.entity || enemyData.path.length < 2) {
+    if (!enemyData.entity || enemyData.path.length === 0) {
       return;
     }
 
     const enemy = enemyData.entity;
 
+    if (enemyData.shouldFire) {
+      enemy.fire();
+    }
+
     if (!enemyData.nextPosition) {
       enemyData.nextPosition = this.convertTilePositionToPixels(enemyData.path.shift());
     }
+    enemy.stop();
 
     const nextPosition = enemyData.nextPosition;
 
-    if (Math.abs(enemy.x - nextPosition.x) < 4 && Math.abs(enemy.y - nextPosition.y) < 4) {
-      enemyData.nextPosition = this.convertTilePositionToPixels(enemyData.path.shift());
-      enemy.stop();
+    if (Math.abs(enemy.x - nextPosition.x) < 1 && Math.abs(enemy.y - nextPosition.y) < 1) {
       enemy.x = nextPosition.x;
       enemy.y = nextPosition.y;
+      enemyData.nextPosition = this.convertTilePositionToPixels(enemyData.path.shift());
       return;
     }
 
