@@ -34,6 +34,15 @@ export class Tank extends Entity {
   }
 
   onCollisionEntity(entity) {
+    if (entity.type === 'HealthUp') {
+      if (this.isEnemy) {
+        return true;
+      } else {
+        this.heal();
+        gameManager.deleteEntity(entity);
+        return true;
+      }
+    }
     if (this.isEnemy && !entity.isEnemy || !this.isEnemy && entity.isEnemy) {
       gameManager.deleteEntity(this);
       gameManager.deleteEntity(entity);

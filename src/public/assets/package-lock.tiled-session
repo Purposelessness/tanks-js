@@ -13,11 +13,11 @@
             "expandedObjectLayers": [
                 6
             ],
-            "scale": 0.5998,
+            "scale": 1.74,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 532.6775591863955,
-                "y": 268.42280760253414
+                "x": 593.3908045977012,
+                "y": 326.4367816091954
             }
         },
         "first.tmx": {
@@ -32,11 +32,11 @@
             "expandedObjectLayers": [
                 4
             ],
-            "scale": 0.8372,
+            "scale": 0.9346,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 639.6321070234114,
-                "y": 553.03392259914
+                "x": 442.4352664241386,
+                "y": 297.4534560239675
             }
         },
         "tilemap.tsj": {

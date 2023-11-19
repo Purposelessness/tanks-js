@@ -22,10 +22,8 @@ class HighscoreManager {
     const entries = [];
     for (let i = 0; i < localStorage.length; ++i) {
       const value = JSON.parse(localStorage.getItem(i.toString()));
-      console.log(value);
       entries.push({ name: value.name, score: value.score });
     }
-    console.log(entries);
     return entries;
   }
 

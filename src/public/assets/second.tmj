@@ -200,6 +200,39 @@
                  "width":24,
                  "x":355.401792734707,
                  "y":389.998427425696
+                }, 
+                {
+                 "height":32,
+                 "id":18,
+                 "name":"HealthUp",
+                 "rotation":0,
+                 "type":"HealthUp",
+                 "visible":true,
+                 "width":32,
+                 "x":448,
+                 "y":64
+                }, 
+                {
+                 "height":32,
+                 "id":19,
+                 "name":"HealthUp",
+                 "rotation":0,
+                 "type":"HealthUp",
+                 "visible":true,
+                 "width":32,
+                 "x":544,
+                 "y":352
+                }, 
+                {
+                 "height":32,
+                 "id":20,
+                 "name":"HealthUp",
+                 "rotation":0,
+                 "type":"HealthUp",
+                 "visible":true,
+                 "width":32,
+                 "x":896,
+                 "y":576
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -208,7 +241,7 @@
          "y":0
         }],
  "nextlayerid":5,
- "nextobjectid":18,
+ "nextobjectid":21,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

@@ -17,6 +17,9 @@ export class Entity {
     this.type = null;
   }
 
+  update() {
+  }
+
   stop() {
     this.moveX = 0;
     this.moveY = 0;

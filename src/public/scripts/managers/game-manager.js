@@ -1,5 +1,5 @@
 import { Enemy } from '../entities/enemy.js';
-import { Health } from '../entities/health.js';
+import { HealthUp } from '../entities/health-up.js';
 import { Player } from '../entities/player.js';
 import { Rocket } from '../entities/rocket.js';
 import enemyAiController from './enemy-ai-controller.js';
@@ -40,7 +40,7 @@ class GameManager {
     'Player': Player,
     'Enemy': Enemy,
     'Rocket': Rocket,
-    'Health': Health,
+    'HealthUp': HealthUp,
   };
 
   createEntity = (type, name, x, y, width, height) => {
