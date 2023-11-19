@@ -21,6 +21,7 @@ class GameManager {
   toDelete = [];
 
   player = null;
+  score = 0;
 
   factory = {
     'Player': Player,
@@ -64,6 +65,7 @@ class GameManager {
     this.doControls();
     this.forEachEntity(entity => entity.update());
     this.toDelete.forEach(entity => {
+      this.entities[entity.id].onDelete();
       delete this.entities[entity.id];
     });
     this.toDelete = [];
@@ -109,6 +111,11 @@ class GameManager {
   play() {
     this.update();
     requestAnimationFrame(() => this.play());
+  }
+
+  addScore(score) {
+    this.score += score;
+    console.log(`Score: ${this.score}`);
   }
 }
 

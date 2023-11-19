@@ -31,15 +31,12 @@ export class Tank extends Entity {
   }
 
   onCollisionEntity(entity) {
-    console.log('Player collided with entity:', entity);
   }
 
   onCollisionTile() {
-    console.log('Player collided with tile');
   }
 
   fire() {
-    console.log('Fire!', new Date() - this.lastFireDate);
     if (new Date().getTime() - this.lastFireDate < this.fireDelay) {
       return null;
     }

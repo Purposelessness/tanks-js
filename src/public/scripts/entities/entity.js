@@ -40,4 +40,7 @@ export class Entity {
     this.moveX = 1;
     this.direction = 'Right';
   }
+
+  onDelete() {
+  }
 }

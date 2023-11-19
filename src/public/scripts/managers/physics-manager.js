@@ -51,10 +51,6 @@ class PhysicsManager {
       if (e.id === obj.id) {
         return false;
       }
-      // return x < e.x + 16 + e.width / 2 &&
-      //   x > e.x + 16 - e.width / 2 &&
-      //   y < e.y + 16 + e.height / 2 &&
-      //   y > e.y + 16 - e.height / 2;
       return x + width / 2 < e.x + 16 + e.width / 2 &&
         x + width / 2 > e.x + 16 - e.width / 2 &&
         y + height / 2 < e.y + 16 + e.height / 2 &&
