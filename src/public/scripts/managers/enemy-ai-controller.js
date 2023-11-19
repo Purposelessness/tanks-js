@@ -7,11 +7,17 @@ import { Node } from './enemy-controller.js';
 
 class EnemyAiController {
   seekRadius = 200;
+  seekLength = 15;
+  interval = null;
 
   start() {
-    setInterval(() => {
+    this.interval = setInterval(() => {
       this.recalculatePath();
     }, 500);
+  }
+
+  stop() {
+    clearInterval(this.interval);
   }
 
   // Enemy should follow the player if he is in the radius of 200 pixels
@@ -52,9 +58,7 @@ class EnemyAiController {
   }
 
   shouldFire(enemy) {
-    if (this.isPlayerInLineOfSight(enemy)) {
-      enemyController.enemies[enemy.id].shouldFire = true;
-    }
+    enemyController.enemies[enemy.id].shouldFire = this.isPlayerInLineOfSight(enemy);
   }
 
   isPlayerInLineOfSight(enemy) {
@@ -93,15 +97,14 @@ class EnemyAiController {
     // Path to player
     let path = this.findPath(enemyTileX, enemyTileY, playerTileX, playerTileY);
 
-    if (path.length > 10) {
+    if (path.length > 15) {
       const tileToMove = this.findRandomEmptyTile();
       // Path to random tile
       path = this.findPath(enemyTileX, enemyTileY, tileToMove.x, tileToMove.y);
-      enemyController.enemies[enemy.id].nextPosition = null;
     }
 
+    path.reverse();
     if (path.length > 0) {
-      path.reverse();
       enemyController.enemies[enemy.id].path = path;
     }
   }

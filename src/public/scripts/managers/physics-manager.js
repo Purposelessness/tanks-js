@@ -13,14 +13,18 @@ class PhysicsManager {
     const wallAt = this.wallAt(newX, newY, obj.width, obj.height);
     const waterAt = this.waterAt(newX, newY, obj.width, obj.height);
 
-    const e = this.entityAt(obj, newX, newY, obj.width, obj.height);
+    const es = this.entitiesAt(obj, newX, newY, obj.width, obj.height);
 
     if (waterAt && obj.type !== 'Rocket') {
       return false;
     }
-    if (e != null && obj.onCollisionEntity) {
-      const res = obj.onCollisionEntity(e);
-      if (!res) return false;
+    if (es != null) {
+      for (const e of es) {
+        if (e != null && obj.onCollisionEntity) {
+          const res = obj.onCollisionEntity(e);
+          if (!res) return false;
+        }
+      }
     }
     if (wallAt && obj.onCollisionTile) {
       const res = obj.onCollisionTile();
@@ -58,28 +62,36 @@ class PhysicsManager {
     return !this.wallAtTile(x, y) && !this.waterAtTile(x, y);
   }
 
-  entityAt(obj, x, y, width, height) {
-    return gameManager.getEntitiesAsArray().find(e => {
+  entitiesAt(obj, x, y, width, height) {
+    const es = [];
+    for (const e of gameManager.getEntitiesAsArray()) {
       if (e.id === obj.id) {
-        return false;
+        continue;
       }
-      return x + width / 2 < e.x + 16 + e.width / 2 &&
-        x + width / 2 > e.x + 16 - e.width / 2 &&
-        y + height / 2 < e.y + 16 + e.height / 2 &&
-        y + height / 2 > e.y + 16 - e.height / 2 ||
-        x - width / 2 < e.x + 16 + e.width / 2 &&
-        x - width / 2 > e.x + 16 - e.width / 2 &&
-        y + height / 2 < e.y + 16 + e.height / 2 &&
-        y + height / 2 > e.y + 16 - e.height / 2 ||
-        x + width / 2 < e.x + 16 + e.width / 2 &&
-        x + width / 2 > e.x + 16 - e.width / 2 &&
-        y - height / 2 < e.y + 16 + e.height / 2 &&
-        y - height / 2 > e.y + 16 - e.height / 2 ||
-        x - width / 2 < e.x + 16 + e.width / 2 &&
-        x - width / 2 > e.x + 16 - e.width / 2 &&
-        y - height / 2 < e.y + 16 + e.height / 2 &&
-        y - height / 2 > e.y + 16 - e.height / 2;
-    }) ?? null;
+      if (this.intersects(x, y, width, height, e)) {
+        es.push(e);
+      }
+    }
+    return es.length > 0 ? es : null;
+  }
+
+  intersects(x, y, width, height, e) {
+    return x + width / 2 < e.x + 16 + e.width / 2 &&
+      x + width / 2 > e.x + 16 - e.width / 2 &&
+      y + height / 2 < e.y + 16 + e.height / 2 &&
+      y + height / 2 > e.y + 16 - e.height / 2 ||
+      x - width / 2 < e.x + 16 + e.width / 2 &&
+      x - width / 2 > e.x + 16 - e.width / 2 &&
+      y + height / 2 < e.y + 16 + e.height / 2 &&
+      y + height / 2 > e.y + 16 - e.height / 2 ||
+      x + width / 2 < e.x + 16 + e.width / 2 &&
+      x + width / 2 > e.x + 16 - e.width / 2 &&
+      y - height / 2 < e.y + 16 + e.height / 2 &&
+      y - height / 2 > e.y + 16 - e.height / 2 ||
+      x - width / 2 < e.x + 16 + e.width / 2 &&
+      x - width / 2 > e.x + 16 - e.width / 2 &&
+      y - height / 2 < e.y + 16 + e.height / 2 &&
+      y - height / 2 > e.y + 16 - e.height / 2;
   }
 }
 

@@ -58,7 +58,13 @@ class EnemyController {
 
     const nextPosition = enemyData.nextPosition;
 
-    if (Math.abs(enemy.x - nextPosition.x) < 1 && Math.abs(enemy.y - nextPosition.y) < 1) {
+    if (Math.abs(enemy.x - nextPosition.x) > 16 && Math.abs(enemy.y - nextPosition.y) > 16) {
+      enemyData.path = [];
+      enemyData.nextPosition = null;
+      return;
+    }
+
+    if (Math.abs(enemy.x - nextPosition.x) < 4 && Math.abs(enemy.y - nextPosition.y) < 4) {
       enemy.x = nextPosition.x;
       enemy.y = nextPosition.y;
       enemyData.nextPosition = this.convertTilePositionToPixels(enemyData.path.shift());

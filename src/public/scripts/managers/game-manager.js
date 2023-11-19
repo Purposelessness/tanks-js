@@ -11,6 +11,7 @@ import spriteManager from './sprite-manager.js';
 
 class GameManager {
   static uniqueId = 0;
+  isPlaying = false;
 
   getUniqueId() {
     return GameManager.uniqueId++;
@@ -33,7 +34,7 @@ class GameManager {
   };
 
   createEntity = (type, name, x, y, width, height) => {
-    const entity = new this.factory[type](name);
+    const entity = new this.factory[type]();
     const fitPosition = mapManager.fitPositionToTile(x, y);
     entity.x = fitPosition.x;
     entity.y = fitPosition.y;
@@ -52,8 +53,13 @@ class GameManager {
 
   deleteEntity(entity) {
     this.toDelete.push(entity);
-    if (entity.type === 'Tank' && entity.isEnemy) {
-      delete enemyController.enemies[entity.id];
+    if (entity.type === 'Tank') {
+      if (entity.isEnemy) {
+        delete enemyController.enemies[entity.id];
+      } else {
+        this.player = null;
+        this.stop();
+      }
     }
   };
 
@@ -118,13 +124,22 @@ class GameManager {
   }
 
   update() {
+    if (!this.isPlaying) {
+      return;
+    }
     this.updateLoop();
     requestAnimationFrame(() => this.update());
   }
 
   play() {
+    this.isPlaying = true;
     this.update();
     enemyAiController.start();
+  }
+
+  stop() {
+    this.isPlaying = false;
+    enemyAiController.stop();
   }
 
   addScore(score) {
