@@ -1,5 +1,6 @@
 import gameManager from './managers/game-manager.js';
 import highscoreManager from './managers/highscore-manager.js';
+import soundManager from './managers/sound-manager.js';
 import viewManager from './managers/view-manager.js';
 
 const canvas = document.getElementById('canvas');
@@ -28,4 +29,19 @@ gameManager.canvas = canvas;
 gameManager.ctx = ctx;
 
 gameManager.start();
+soundManager.start();
 gameManager.load();
+soundManager.loadArray([
+  {
+    name: 'fire',
+    path: '/assets/fire.mp3',
+  },
+  {
+    name: 'explosion',
+    path: '/assets/explosion.mp3',
+  },
+  {
+    name: 'healthup',
+    path: '/assets/healthup.mp3',
+  },
+]);

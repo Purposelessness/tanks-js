@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "tilemap.tsx",
+    "activeFile": "tilemap.tsj",
     "expandedProjectPaths": [
         "."
     ],
@@ -13,11 +13,11 @@
             "expandedObjectLayers": [
                 6
             ],
-            "scale": 1.74,
+            "scale": 0.7583,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 593.3908045977012,
-                "y": 326.4367816091954
+                "x": 497.8240801793486,
+                "y": 199.12963207173937
             }
         },
         "first.tmx": {
@@ -40,7 +40,8 @@
             }
         },
         "tilemap.tsj": {
-            "scaleInEditor": 1.57
+            "scaleInDock": 1.0807,
+            "scaleInEditor": 1.174
         },
         "tilemap.tsx": {
             "scaleInDock": 1,
@@ -50,15 +51,17 @@
     "last.imagePath": "/Users/purposeless/projects/js/tanks-2d/assets",
     "map.lastUsedFormat": "json",
     "openFiles": [
-        "tilemap.tsx"
+        "first.tmj",
+        "second.tmj",
+        "tilemap.tsj"
     ],
     "project": "package-lock.tiled-project",
     "recentFiles": [
-        "second.tmj",
         "first.tmj",
+        "second.tmj",
+        "tilemap.tsj",
         "first.tmx",
-        "tilemap.tsx",
-        "tilemap.tsj"
+        "tilemap.tsx"
     ],
     "tileset.lastUsedFormat": "json"
 }

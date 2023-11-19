@@ -16,4 +16,9 @@ export class Player extends Tank {
     this.health++;
     viewManager.updateHealth(this.health);
   }
+
+  updateHealth(health) {
+    this.health = health;
+    viewManager.updateHealth(this.health);
+  }
 }

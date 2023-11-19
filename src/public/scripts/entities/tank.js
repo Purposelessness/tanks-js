@@ -1,5 +1,6 @@
 import gameManager from '../managers/game-manager.js';
 import physicsManager from '../managers/physics-manager.js';
+import soundManager from '../managers/sound-manager.js';
 import spriteManager from '../managers/sprite-manager.js';
 import { Entity } from './entity.js';
 import { Rocket } from './rocket.js';
@@ -40,6 +41,7 @@ export class Tank extends Entity {
       } else {
         this.heal();
         gameManager.deleteEntity(entity);
+        soundManager.play('healthup');
         return true;
       }
     }
@@ -61,6 +63,7 @@ export class Tank extends Entity {
     this.lastFireDate = new Date().getTime();
 
     const rocket = new Rocket(this.isEnemy);
+    soundManager.play('fire');
 
     switch (this.direction) {
       case 'Up':
@@ -94,5 +97,10 @@ export class Tank extends Entity {
     if (this.health <= 0) {
       gameManager.deleteEntity(this);
     }
+  }
+
+  onDelete() {
+    super.onDelete();
+    soundManager.play('explosion');
   }
 }

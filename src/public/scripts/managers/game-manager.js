@@ -35,6 +35,7 @@ class GameManager {
 
   player = null;
   score = 0;
+  health = 1;
 
   factory = {
     'Player': Player,
@@ -53,6 +54,8 @@ class GameManager {
     this.entities[entity.id] = entity;
 
     if (type === 'Player') {
+      entity.updateHealth(this.health);
+      console.log(`Player health: ${this.health}`);
       this.player = entity;
     } else if (type === 'Enemy') {
       ++this.enemies;
@@ -70,7 +73,7 @@ class GameManager {
         delete enemyController.enemies[entity.id];
         --this.enemies;
         if (this.enemies === 0) {
-          this.addScore(100);
+          entity.onDelete();
           this.nextLevel();
         }
       } else {
@@ -78,6 +81,7 @@ class GameManager {
           console.log(`Adding highscore ${this.score}`);
           highscoreManager.addEntry(viewManager.getName(), this.score);
         }
+        entity.onDelete();
         this.stop();
       }
     }
@@ -177,6 +181,7 @@ class GameManager {
     enemyAiController.stop();
     this.entities = {};
     this.toDelete = [];
+    this.health = this.player.health;
     this.player = null;
     mapManager.clear();
   }
