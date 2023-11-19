@@ -39,11 +39,23 @@ class PhysicsManager {
       mapManager.getTilesetIdx('Walls', x + width / 2, y + height / 2) !== 0;
   }
 
+  wallAtTile(x, y) {
+    return mapManager.getTilesetIdxByTile('Walls', x, y) !== 0;
+  }
+
   waterAt(x, y, width, height) {
     return mapManager.getTilesetIdx('Background', x - width / 2, y - height / 2) === 73 ||
       mapManager.getTilesetIdx('Background', x + width / 2, y - height / 2) === 73 ||
       mapManager.getTilesetIdx('Background', x - width / 2, y + height / 2) === 73 ||
       mapManager.getTilesetIdx('Background', x + width / 2, y + height / 2) === 73;
+  }
+
+  waterAtTile(x, y) {
+    return mapManager.getTilesetIdxByTile('Background', x, y) === 73;
+  }
+
+  isTileEmpty(x, y) {
+    return !this.wallAtTile(x, y) && !this.waterAtTile(x, y);
   }
 
   entityAt(obj, x, y, width, height) {

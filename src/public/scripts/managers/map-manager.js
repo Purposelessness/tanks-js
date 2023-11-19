@@ -148,6 +148,19 @@ export class MapManager {
     return layer ? layer.data[idx] : null;
   }
 
+  getTilesetIdxByTile(layerName, x, y) {
+    const layer = this.mapData.layers.find(layer => layer.name === layerName);
+    return layer ? layer.data[y * this.xCount + x] : null;
+  }
+
+  fitPositionToTile(x, y) {
+    const tileX = this.tSize.x;
+    const tileY = this.tSize.y;
+    return {
+      x: Math.floor(x / tileX) * tileX,
+      y: Math.floor(y / tileY) * tileY,
+    };
+  }
 }
 
 const mapManager = new MapManager();

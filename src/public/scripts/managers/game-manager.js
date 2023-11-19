@@ -2,6 +2,8 @@ import { Enemy } from '../entities/enemy.js';
 import { Health } from '../entities/health.js';
 import { Player } from '../entities/player.js';
 import { Rocket } from '../entities/rocket.js';
+import enemyAiController from './enemy-ai-controller.js';
+import enemyController, { EnemyData } from './enemy-controller.js';
 import eventsManager from './events-manager.js';
 
 import mapManager from './map-manager.js';
@@ -32,14 +34,17 @@ class GameManager {
 
   createEntity = (type, name, x, y, width, height) => {
     const entity = new this.factory[type](name);
-    entity.x = x;
-    entity.y = y;
+    const fitPosition = mapManager.fitPositionToTile(x, y);
+    entity.x = fitPosition.x;
+    entity.y = fitPosition.y;
     entity.width = width;
     entity.height = height;
     this.entities[entity.id] = entity;
 
     if (type === 'Player') {
       this.player = entity;
+    } else if (type === 'Enemy') {
+      enemyController.enemies[entity.id] = new EnemyData(entity);
     }
 
     return entity;
@@ -47,6 +52,9 @@ class GameManager {
 
   deleteEntity(entity) {
     this.toDelete.push(entity);
+    if (entity.type === 'Tank' && entity.isEnemy) {
+      delete enemyController.enemies[entity.id];
+    }
   };
 
   forEachEntity(callback) {
@@ -61,8 +69,9 @@ class GameManager {
     this.forEachEntity(entity => entity.draw(ctx));
   };
 
-  update() {
+  updateLoop() {
     this.doControls();
+    enemyController.update();
     this.forEachEntity(entity => entity.update());
     this.toDelete.forEach(entity => {
       this.entities[entity.id].onDelete();
@@ -79,8 +88,7 @@ class GameManager {
       return;
     }
 
-    this.player.moveX = 0;
-    this.player.moveY = 0;
+    this.player.stop();
 
     if (eventsManager.actions['up']) {
       this.player.goUp();
@@ -108,9 +116,14 @@ class GameManager {
     eventsManager.setup(this.canvas);
   }
 
+  update() {
+    this.updateLoop();
+    requestAnimationFrame(() => this.update());
+  }
+
   play() {
     this.update();
-    requestAnimationFrame(() => this.play());
+    enemyAiController.start();
   }
 
   addScore(score) {

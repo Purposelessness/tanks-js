@@ -17,6 +17,11 @@ export class Entity {
     this.type = null;
   }
 
+  stop() {
+    this.moveX = 0;
+    this.moveY = 0;
+  }
+
   goUp() {
     this.moveY = -1;
     this.moveX = 0;
